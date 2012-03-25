@@ -1,0 +1,60 @@
+[
+  {
+    "pk": 1, 
+    "model": "polls.author", 
+    "fields": {
+      "birth_date": "1840-04-02", 
+      "name": "Emile Zola", 
+      "title": "MR"
+    }
+  }, 
+  {
+    "pk": 2, 
+    "model": "polls.author", 
+    "fields": {
+      "birth_date": "1783-01-23", 
+      "name": "Marie-Henri Beyle (Stendhal)", 
+      "title": "MR"
+    }
+  }, 
+  {
+    "pk": 1, 
+    "model": "polls.book", 
+    "fields": {
+      "name": "La Fortune des Rougon", 
+      "author": 1
+    }
+  }, 
+  {
+    "pk": 2, 
+    "model": "polls.book", 
+    "fields": {
+      "name": "La Cur\u00e9e", 
+      "author": 1
+    }
+  }, 
+  {
+    "pk": 3, 
+    "model": "polls.book", 
+    "fields": {
+      "name": "Le Ventre de Paris", 
+      "author": 1
+    }
+  }, 
+  {
+    "pk": 4, 
+    "model": "polls.book", 
+    "fields": {
+      "name": "Le Rouge et le Noir", 
+      "author": 2
+    }
+  }, 
+  {
+    "pk": 5, 
+    "model": "polls.book", 
+    "fields": {
+      "name": "La Chartreuse de Parme", 
+      "author": 2
+    }
+  }
+]
