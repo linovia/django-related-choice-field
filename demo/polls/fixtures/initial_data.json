@@ -29,7 +29,7 @@
     "pk": 2, 
     "model": "polls.book", 
     "fields": {
-      "name": "La Cur\u00e9e", 
+      "name": "La Curee", 
       "author": 1
     }
   }, 

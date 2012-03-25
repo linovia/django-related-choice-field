@@ -18,7 +18,7 @@ class Author(models.Model):
 
 class Book(models.Model):
     name = models.CharField(max_length=100)
-    author = models.ForeignKey(Author)
+    author = models.ForeignKey(Author, related_name='books')
 
     def __unicode__(self):
         return self.name

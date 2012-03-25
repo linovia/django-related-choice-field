@@ -116,6 +116,13 @@ INSTALLED_APPS = (
     'linked_choice_field',
 )
 
+try:
+    import django_coverage
+    INSTALLED_APPS += ('django_coverage',)
+    COVERAGE_ADDITIONAL_MODULES = ('linked_choice_field',)
+except:
+    pass
+
 # A sample logging configuration. The only tangible logging
 # performed by this configuration is to send an email to
 # the site admins on every HTTP 500 error.
