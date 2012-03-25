@@ -8,6 +8,9 @@ from django.core.exceptions import ValidationError
 from django.utils.encoding import force_unicode, smart_unicode
 from django.utils.html import escape, conditional_escape
 from django.utils.datastructures import MultiValueDict, MergeDict
+from django.utils.translation import ugettext_lazy as _
+from django.forms.widgets import MultipleHiddenInput
+
 
 MEDIA_JS = """
     <script type="text/javascript" defer="defer">
@@ -161,6 +164,13 @@ class MultipleLinkedSelect(LinkedSelect):
 
 class LinkedModelMultipleChoiceField(LinkedModelChoiceField):
     widget = MultipleLinkedSelect
+    hidden_widget = MultipleHiddenInput
+    default_error_messages = {
+        'list': _(u'Enter a list of values.'),
+        'invalid_choice': _(u'Select a valid choice. %s is not one of the'
+                            u' available choices.'),
+        'invalid_pk_value': _(u'"%s" is not a valid value for a primary key.')
+    }
 
     def clean(self, value):
         """
@@ -184,9 +194,9 @@ class LinkedModelMultipleChoiceField(LinkedModelChoiceField):
             except ValueError:
                 raise ValidationError(self.error_messages['invalid_pk_value'] % pk)
         qs = self.queryset.filter(**{'%s__in' % key: [v[0] for v in value]})
-        pks = set([force_unicode(getattr(o, key)) for o in qs])
+        pks = set([(force_unicode(getattr(o, key)), getattr(o, '%s_id' % self.related_model_name, None)) for o in qs])
         for val, linked_pk in value:
-            if force_unicode(val) not in pks:
+            if (force_unicode(val), int(linked_pk)) not in pks:
                 raise ValidationError(self.error_messages['invalid_choice'] % val)
         # Since this overrides the inherited ModelChoiceField.clean
         # we run custom validators here
