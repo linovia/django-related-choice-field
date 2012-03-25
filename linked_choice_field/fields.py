@@ -115,9 +115,6 @@ class LinkedModelChoiceField(forms.ModelChoiceField):
                 (self.related_form_field_name,))
         return value
 
-    def label_from_instance(self, obj):
-        return smart_unicode(obj.value)
-
     def prepare_value(self, value):
         if hasattr(value, '_meta'):
             if self.to_field_name:
