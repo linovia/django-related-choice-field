@@ -13,6 +13,8 @@ from setuptools import setup, find_packages
 
 tests_require = [
     # 'nose==1.1.2',
+    'django_coverage',
+    'coverage',
 ]
 
 install_requires = [
