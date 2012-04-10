@@ -3,29 +3,6 @@
     <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
 </head>
 <body>
-    <script type="text/javascript" defer="defer">
-        function cascadeSelect(parent, child){
-                var childOptions = child.find('option:not(.static)');
-                    child.data('options',childOptions);
-
-                parent.change(function(){
-                    childOptions.remove();
-                    child.append(
-                        child.data('options').filter('.sub_' + this.value)
-                    ).change();
-                })
-
-                childOptions.not('.static, .sub_' + parent.val()).remove();
-        }
-
-        $(function(){
-            pollSelect = $('#id_author');
-            choiceSelect = $('#id_book');
-
-            cascadeSelect(pollSelect, choiceSelect);
-        });
-    </script>
-
 {{form}}
 </body>
 </html>

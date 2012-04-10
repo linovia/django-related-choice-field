@@ -29,10 +29,10 @@ MEDIA_JS = """
         }
 
         $(function(){
-            pollSelect = $('#id_poll');
-            choiceSelect = $('#id_choice');
+            %(source)sSelect = $('#id_%(source)s');
+            %(destination)sSelect = $('#id_%(destination)s');
 
-            cascadeSelect(pollSelect, choiceSelect);
+            cascadeSelect(%(source)sSelect, %(destination)sSelect);
         });
     </script>
 """
@@ -41,7 +41,22 @@ MEDIA_JS = """
 class RelatedSelect(forms.Select):
     allow_multiple_selected = False
 
-    def render_options(self, choices, selected_choices):
+    def render(self, name, value, attrs=None, choices=()):
+        if value is None: value = ''
+        final_attrs = self.build_attrs(attrs, name=name)
+        output = [u'<select%s>' % flatatt(final_attrs)]
+        options = self.render_options(choices, [value], name=name)
+        if options:
+            output.append(options)
+        output.append(u'</select>')
+        output.append(MEDIA_JS % {
+            'source': self.related_form_field_name,
+            'destination': name
+        })
+
+        return mark_safe(u'\n'.join(output))
+
+    def render_options(self, choices, selected_choices, name=None):
         # Normalize to strings.
         output = []
         for option_value, option_label in chain(self.choices, choices):
@@ -55,7 +70,6 @@ class RelatedSelect(forms.Select):
             else:
                 output.append(self.render_option(
                     selected_choices, option_value, option_label))
-
         return u'\n'.join(output)
 
     def render_option(self, selected_choices, option_value, option_label):
