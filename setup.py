@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 """
-django-linked-choice-field
-==========================
+django-related-choice-field
+===========================
 
 A ModelChoiceField that can span a relation between two models.
 
@@ -22,11 +22,11 @@ install_requires = [
 ]
 
 setup(
-    name='django-linked-choice-field',
+    name='django-related-choice-field',
     version='0.1.0',
     author='Xavier Ordoquy',
     author_email='xordoquy@linovia.com',
-    url='http://github.com/linovia/django-linked-choice-field',
+    url='http://github.com/linovia/django-related-choice-field',
     description='A ModelChoiceField that restricts its content \
 according to a foreign key contraint.',
     long_description=__doc__,

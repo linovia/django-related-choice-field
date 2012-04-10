@@ -38,7 +38,7 @@ MEDIA_JS = """
 """
 
 
-class LinkedSelect(forms.Select):
+class RelatedSelect(forms.Select):
     allow_multiple_selected = False
 
     def render_options(self, choices, selected_choices):
@@ -60,14 +60,14 @@ class LinkedSelect(forms.Select):
 
     def render_option(self, selected_choices, option_value, option_label):
         if option_value:
-            option_value, linked_option_value = option_value
-            linked_option_str = u'sub_%s' % linked_option_value
+            option_value, related_option_value = option_value
+            related_option_str = u'sub_%s' % related_option_value
         else:
-            linked_option_value = None
-            linked_option_str = u'static'
+            related_option_value = None
+            related_option_str = u'static'
         option_value = force_unicode(option_value)
 
-        option_tuple = (option_value, force_unicode(linked_option_value))
+        option_tuple = (option_value, force_unicode(related_option_value))
         if option_tuple in selected_choices:
             selected_html = u' selected="selected"'
             if not self.allow_multiple_selected:
@@ -77,7 +77,7 @@ class LinkedSelect(forms.Select):
             selected_html = ''
 
         value = u'<option value="%s"%s class="%s">%s</option>' % (
-            escape(option_value), selected_html, escape(linked_option_str),
+            escape(option_value), selected_html, escape(related_option_str),
             conditional_escape(force_unicode(option_label)))
         return value
 
@@ -92,15 +92,15 @@ class LinkedSelect(forms.Select):
         )
 
 
-class LinkedModelChoiceField(forms.ModelChoiceField):
-    widget = LinkedSelect
+class RelatedModelChoiceField(forms.ModelChoiceField):
+    widget = RelatedSelect
 
     def __init__(self,
             related_form_field_name=None, related_model_name=None,
             *args, **kwargs):
         self.related_form_field_name = related_form_field_name
         self.related_model_name = related_model_name
-        super(LinkedModelChoiceField, self).__init__(*args, **kwargs)
+        super(RelatedModelChoiceField, self).__init__(*args, **kwargs)
         self.widget.related_form_field_name = self.related_form_field_name
 
     def clean(self, value):
@@ -110,9 +110,9 @@ class LinkedModelChoiceField(forms.ModelChoiceField):
 
         Raises ValidationError for any errors.
         """
-        value, linked_value = value
-        value = super(LinkedModelChoiceField, self).clean(value)
-        if int(linked_value) != \
+        value, related_value = value
+        value = super(RelatedModelChoiceField, self).clean(value)
+        if int(related_value) != \
             getattr(value, '%s_id' % self.related_model_name):
             raise ValidationError('Value does not match %s value.' %
                 (self.related_form_field_name,))
@@ -130,10 +130,10 @@ class LinkedModelChoiceField(forms.ModelChoiceField):
                     value.pk,
                     getattr(value, '%s_id' % self.related_model_name, None)
                 )
-        return super(LinkedModelChoiceField, self).prepare_value(value)
+        return super(RelatedModelChoiceField, self).prepare_value(value)
 
 
-class MultipleLinkedSelect(LinkedSelect):
+class MultipleRelatedSelect(RelatedSelect):
     allow_multiple_selected = True
 
     def render(self, name, value, attrs=None, choices=()):
@@ -162,8 +162,8 @@ class MultipleLinkedSelect(LinkedSelect):
         )
 
 
-class LinkedModelMultipleChoiceField(LinkedModelChoiceField):
-    widget = MultipleLinkedSelect
+class RelatedModelMultipleChoiceField(RelatedModelChoiceField):
+    widget = MultipleRelatedSelect
     hidden_widget = MultipleHiddenInput
     default_error_messages = {
         'list': _(u'Enter a list of values.'),
@@ -188,15 +188,15 @@ class LinkedModelMultipleChoiceField(LinkedModelChoiceField):
         if not isinstance(value, (list, tuple)):
             raise ValidationError(self.error_messages['list'])
         key = self.to_field_name or 'pk'
-        for pk, linked_pk in value:
+        for pk, related_pk in value:
             try:
                 self.queryset.filter(**{key: pk})
             except ValueError:
                 raise ValidationError(self.error_messages['invalid_pk_value'] % pk)
         qs = self.queryset.filter(**{'%s__in' % key: [v[0] for v in value]})
         pks = set([(force_unicode(getattr(o, key)), getattr(o, '%s_id' % self.related_model_name, None)) for o in qs])
-        for val, linked_pk in value:
-            if (force_unicode(val), int(linked_pk)) not in pks:
+        for val, related_pk in value:
+            if (force_unicode(val), int(related_pk)) not in pks:
                 raise ValidationError(self.error_messages['invalid_choice'] % val)
         # Since this overrides the inherited ModelChoiceField.clean
         # we run custom validators here
@@ -206,6 +206,6 @@ class LinkedModelMultipleChoiceField(LinkedModelChoiceField):
     def prepare_value(self, value):
         if hasattr(value, '__iter__'):
             return [
-                super(LinkedModelMultipleChoiceField, self).prepare_value(v)
+                super(RelatedModelMultipleChoiceField, self).prepare_value(v)
                 for v in value]
-        return super(LinkedModelMultipleChoiceField, self).prepare_value(value)
+        return super(RelatedModelMultipleChoiceField, self).prepare_value(value)

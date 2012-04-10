@@ -3,13 +3,13 @@ from django import forms
 from django.views.generic import FormView
 
 from polls.models import Book, Author
-from linked_choice_field.fields import LinkedModelChoiceField
-from linked_choice_field.fields import LinkedModelMultipleChoiceField
+from related_choice_field.fields import RelatedModelChoiceField
+from related_choice_field.fields import RelatedModelMultipleChoiceField
 
 
 class BookSelectionForm(forms.Form):
     author = forms.ModelChoiceField(queryset=Author.objects.all())
-    book = LinkedModelChoiceField(
+    book = RelatedModelChoiceField(
         queryset=Book.objects.all(),
         related_form_field_name='author',
         related_model_name='author')
@@ -17,7 +17,7 @@ class BookSelectionForm(forms.Form):
 
 class MultiBookSelectionForm(forms.Form):
     author = forms.ModelChoiceField(queryset=Author.objects.all())
-    book = LinkedModelMultipleChoiceField(
+    book = RelatedModelMultipleChoiceField(
         queryset=Book.objects.all(),
         related_form_field_name='author',
         related_model_name='author')

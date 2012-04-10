@@ -1,5 +1,5 @@
-Django Linked Choice Field
-~~~~~~~~~~~~~~~~~~~~~~~~~~
+Django Related Choice Field
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Disclaimer: This is work in progress and needs some improvements to get to
 a production ready state.

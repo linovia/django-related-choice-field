@@ -113,13 +113,13 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'django.contrib.admin',
     'polls',
-    'linked_choice_field',
+    'related_choice_field',
 )
 
 try:
     import django_coverage
     INSTALLED_APPS += ('django_coverage',)
-    COVERAGE_ADDITIONAL_MODULES = ('linked_choice_field',)
+    COVERAGE_ADDITIONAL_MODULES = ('related_choice_field',)
 except:
     pass
 
