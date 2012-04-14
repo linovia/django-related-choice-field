@@ -1,7 +1,7 @@
 Django Related Choice Field
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-[![Build Status](https://secure.travis-ci.org/linovia/django-related-choice-field.png?branch=master)](http://travis-ci.org/linovia/django-related-choice-field)
+https://secure.travis-ci.org/linovia/django-related-choice-field.png?branch=master
 
 This field is an extention of Django ModelChoiceField to reflect a
 ForeignKey relation.
