@@ -19,3 +19,14 @@ install:
 
 script:
   - python ./demo/manage.py test polls
+
+matrix:
+  exclude:
+    - python: "3.2"
+      env: DJANGO="django==1.4.5 --use-mirrors"
+    - python: "3.2"
+      env: DJANGO="django==1.3.7 --use-mirrors"
+    - python: "3.3"
+      env: DJANGO="django==1.4.5 --use-mirrors"
+    - python: "3.3"
+      env: DJANGO="django==1.3.7 --use-mirrors"
