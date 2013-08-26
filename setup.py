@@ -22,7 +22,7 @@ install_requires = [
 
 setup(
     name='django-related-choice-field',
-    version='0.2.0',
+    version='0.2.1',
     author='Xavier Ordoquy',
     author_email='xordoquy@linovia.com',
     url='http://github.com/linovia/django-related-choice-field',
@@ -38,11 +38,16 @@ according to a foreign key contraint.',
     test_suite='runtests.runtests',
     include_package_data=True,
     classifiers=[
-        'Development Status :: 3 - Beta',
+        'Development Status :: 4 - Beta',
         'Framework :: Django',
         'Intended Audience :: Developers',
         'License :: OSI Approved :: BSD License',
         'Operating System :: OS Independent',
         'Topic :: Software Development :: Libraries :: Python Modules',
+        'Programming Language :: Python',
+        'Programming Language :: Python :: 2.6',
+        'Programming Language :: Python :: 2.7',
+        'Programming Language :: Python :: 3.2',
+        'Programming Language :: Python :: 3.3',
     ],
 )
