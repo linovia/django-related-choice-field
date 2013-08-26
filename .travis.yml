@@ -14,6 +14,7 @@ env:
 
 install:
   - pip install $DJANGO
+  - pip install "pytest==2.3.5" "pytest-django-lite==0.1.0" --use-mirrors
   - python setup.py develop
 
 
