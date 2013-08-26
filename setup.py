@@ -12,9 +12,8 @@ from setuptools import setup, find_packages
 
 
 tests_require = [
-    # 'nose==1.1.2',
-    'django_coverage',
-    'coverage',
+    pytest==2.3.5
+    pytest-django-lite==0.1.0
 ]
 
 install_requires = [
