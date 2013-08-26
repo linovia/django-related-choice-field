@@ -2,7 +2,7 @@
 from django import forms
 from django.views.generic import FormView
 
-from polls.models import Book, Author
+from .models import Book, Author
 from related_choice_field.fields import RelatedModelChoiceField
 from related_choice_field.fields import RelatedModelMultipleChoiceField
 

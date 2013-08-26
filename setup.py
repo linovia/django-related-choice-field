@@ -12,9 +12,8 @@ from setuptools import setup, find_packages
 
 
 tests_require = [
-    # 'nose==1.1.2',
-    'django_coverage',
-    'coverage',
+    "pytest==2.3.5",
+    "pytest-django-lite==0.1.0",
 ]
 
 install_requires = [
@@ -23,7 +22,7 @@ install_requires = [
 
 setup(
     name='django-related-choice-field',
-    version='0.1.0',
+    version='0.2.0',
     author='Xavier Ordoquy',
     author_email='xordoquy@linovia.com',
     url='http://github.com/linovia/django-related-choice-field',
