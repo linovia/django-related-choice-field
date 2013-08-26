@@ -22,7 +22,7 @@ install_requires = [
 
 setup(
     name='django-related-choice-field',
-    version='0.2.0',
+    version='0.3.0-dev',
     author='Xavier Ordoquy',
     author_email='xordoquy@linovia.com',
     url='http://github.com/linovia/django-related-choice-field',
