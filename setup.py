@@ -12,8 +12,8 @@ from setuptools import setup, find_packages
 
 
 tests_require = [
-    pytest==2.3.5
-    pytest-django-lite==0.1.0
+    "pytest==2.3.5",
+    "pytest-django-lite==0.1.0",
 ]
 
 install_requires = [
