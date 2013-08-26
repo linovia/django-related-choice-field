@@ -1,3 +1,4 @@
+from __future__ import print_function, division, absolute_import, unicode_literals
 
 from itertools import chain
 from django.forms.util import flatatt
@@ -5,11 +6,14 @@ from django.utils.safestring import mark_safe
 
 from django import forms
 from django.core.exceptions import ValidationError
-from django.utils.encoding import force_unicode, smart_unicode
 from django.utils.html import escape, conditional_escape
 from django.utils.datastructures import MultiValueDict, MergeDict
 from django.utils.translation import ugettext_lazy as _
 from django.forms.widgets import MultipleHiddenInput
+try:
+    from django.utils.encoding import force_text
+except:
+    from django.utils.encoding import force_unicode as force_text
 
 
 MEDIA_JS = """
@@ -44,55 +48,55 @@ class RelatedSelect(forms.Select):
     def render(self, name, value, attrs=None, choices=()):
         if value is None: value = ''
         final_attrs = self.build_attrs(attrs, name=name)
-        output = [u'<select%s>' % flatatt(final_attrs)]
+        output = ['<select%s>' % flatatt(final_attrs)]
         options = self.render_options(choices, [value], name=name)
         if options:
             output.append(options)
-        output.append(u'</select>')
+        output.append('</select>')
         output.append(MEDIA_JS % {
             'source': self.related_form_field_name,
             'destination': name
         })
 
-        return mark_safe(u'\n'.join(output))
+        return mark_safe('\n'.join(output))
 
     def render_options(self, choices, selected_choices, name=None):
         # Normalize to strings.
         output = []
         for option_value, option_label in chain(self.choices, choices):
             if isinstance(option_label, (list, tuple)):
-                output.append(u'<optgroup label="%s">' %
-                    escape(force_unicode(option_value)))
+                output.append('<optgroup label="%s">' %
+                    escape(force_text(option_value)))
                 for option in option_label:
                     output.append(
                         self.render_option(selected_choices, *option))
-                output.append(u'</optgroup>')
+                output.append('</optgroup>')
             else:
                 output.append(self.render_option(
                     selected_choices, option_value, option_label))
-        return u'\n'.join(output)
+        return '\n'.join(output)
 
     def render_option(self, selected_choices, option_value, option_label):
         if option_value:
             option_value, related_option_value = option_value
-            related_option_str = u'sub_%s' % related_option_value
+            related_option_str = 'sub_%s' % related_option_value
         else:
             related_option_value = None
-            related_option_str = u'static'
-        option_value = force_unicode(option_value)
+            related_option_str = 'static'
+        option_value = force_text(option_value)
 
-        option_tuple = (option_value, force_unicode(related_option_value))
+        option_tuple = (option_value, force_text(related_option_value))
         if option_tuple in selected_choices:
-            selected_html = u' selected="selected"'
+            selected_html = ' selected="selected"'
             if not self.allow_multiple_selected:
                 # Only allow for a single selection.
                 selected_choices.remove(option_tuple)
         else:
             selected_html = ''
 
-        value = u'<option value="%s"%s class="%s">%s</option>' % (
+        value = '<option value="%s"%s class="%s">%s</option>' % (
             escape(option_value), selected_html, escape(related_option_str),
-            conditional_escape(force_unicode(option_label)))
+            conditional_escape(force_text(option_label)))
         return value
 
     def value_from_datadict(self, data, files, name):
@@ -154,12 +158,12 @@ class MultipleRelatedSelect(RelatedSelect):
         if value is None:
             value = []
         final_attrs = self.build_attrs(attrs, name=name)
-        output = [u'<select multiple="multiple"%s>' % flatatt(final_attrs)]
+        output = ['<select multiple="multiple"%s>' % flatatt(final_attrs)]
         options = self.render_options(choices, value)
         if options:
             output.append(options)
         output.append('</select>')
-        return mark_safe(u'\n'.join(output))
+        return mark_safe('\n'.join(output))
 
     def value_from_datadict(self, data, files, name):
         """
@@ -180,10 +184,10 @@ class RelatedModelMultipleChoiceField(RelatedModelChoiceField):
     widget = MultipleRelatedSelect
     hidden_widget = MultipleHiddenInput
     default_error_messages = {
-        'list': _(u'Enter a list of values.'),
-        'invalid_choice': _(u'Select a valid choice. %s is not one of the'
-                            u' available choices.'),
-        'invalid_pk_value': _(u'"%s" is not a valid value for a primary key.')
+        'list': _('Enter a list of values.'),
+        'invalid_choice': _('Select a valid choice. %s is not one of the'
+                            ' available choices.'),
+        'invalid_pk_value': _('"%s" is not a valid value for a primary key.')
     }
 
     def clean(self, value):
@@ -208,9 +212,9 @@ class RelatedModelMultipleChoiceField(RelatedModelChoiceField):
             except ValueError:
                 raise ValidationError(self.error_messages['invalid_pk_value'] % pk)
         qs = self.queryset.filter(**{'%s__in' % key: [v[0] for v in value]})
-        pks = set([(force_unicode(getattr(o, key)), getattr(o, '%s_id' % self.related_model_name, None)) for o in qs])
+        pks = set([(force_text(getattr(o, key)), getattr(o, '%s_id' % self.related_model_name, None)) for o in qs])
         for val, related_pk in value:
-            if (force_unicode(val), int(related_pk)) not in pks:
+            if (force_text(val), int(related_pk)) not in pks:
                 raise ValidationError(self.error_messages['invalid_choice'] % val)
         # Since this overrides the inherited ModelChoiceField.clean
         # we run custom validators here
