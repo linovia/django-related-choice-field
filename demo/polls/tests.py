@@ -4,13 +4,50 @@ when you run "manage.py test".
 
 Replace this with more appropriate tests for your application.
 """
+import pytest
 
 from django.test import TestCase
 from django.test.client import Client
 
-from models import Author
+from .models import Author, Book
 
 
+@pytest.fixture
+def load_db_fixtures():
+    author1 = Author.objects.get_or_create(
+        birth_date="1840-04-02", 
+        name="Emile Zola", 
+        title="MR",
+    )[0]
+    author2 = Author.objects.get_or_create(
+        birth_date="1783-01-23", 
+        name="Marie-Henri Beyle (Stendhal)", 
+        title="MR",
+    )[0]
+
+    book1 = Book.objects.get_or_create(
+        name="La Fortune des Rougon", 
+        author=author1,
+    )[0]
+    book2 = Book.objects.get_or_create(
+        name="La Curee", 
+        author=author1
+    )[0]
+    book3 = Book.objects.get_or_create(
+      name="Le Ventre de Paris", 
+      author=author1
+    )[0]
+    book4 = Book.objects.get_or_create(
+      name="Le Rouge et le Noir", 
+      author=author2
+    )[0]
+    book5 = Book.objects.get_or_create(
+      name="La Chartreuse de Parme", 
+      author=author2
+    )[0]
+    
+
+@pytest.mark.usefixtures("load_db_fixtures")
 class LinkedModelChoiceFieldTest(TestCase):
 
     URL = '/'
@@ -65,6 +102,7 @@ class LinkedModelChoiceFieldTest(TestCase):
             'Value does not match author value.')
 
 
+@pytest.mark.usefixtures("load_db_fixtures")
 class LinkedModelMultipleChoiceFieldTest(TestCase):
 
     URL = '/2/'

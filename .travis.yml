@@ -19,7 +19,7 @@ install:
 
 
 script:
-  - py.test tests
+  - py.test demo/polls
 
 matrix:
   exclude:
